@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: CI
 
 on:
   push:
@@ -13,8 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v2
+
     - name: Build the Docker image
-      run: |
-        docker build . --file Dockerfile.dev --tag mahmoudzidan/docker-react
-        docker run -e CI=true mahmoudzidan/docker-react npm run test -- --coverage
+      run: docker build . --file Dockerfile.dev --tag mahmoudzidan/docker-react
+
+    - name: Test the image
+      run: docker run -e CI=true mahmoudzidan/docker-react npm run test -- --coverage
