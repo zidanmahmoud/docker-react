@@ -15,4 +15,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile.dev --tag mahmoudzidan/docker-react:$(date +%s)
+      run: docker build . --file Dockerfile.dev --tag mahmoudzidan/docker-react
+
+  test:
+
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run the test suite in ./src/App.test.js
+      run: docker run mahmoudzidan/docker-react npm run test -- --coverage
