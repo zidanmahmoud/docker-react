@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+
+  web:
+    stdin_open: true #solution for exit with code 0
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - /home/node/app/node_modules
+      - .:/home/node/app
+
+  # either defin a test service (like below)
+  # or just run docker-compose up --build then get the
+  # container id of "web", then run ...
+  # docker exec -it <id> npm run test
+  web-test:
+    stdin_open: true
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /home/node/app/node_modules
+      - .:/home/node/app
+    command: ["npm", "run", "test"]

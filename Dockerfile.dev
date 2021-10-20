@@ -1,0 +1,21 @@
+FROM node:alpine
+
+
+# WORKDIR '/app'
+# COPY package.json .
+# RUN npm install
+# COPY . .
+
+# solution for EACCES: permission denied, mkdir '/app/node_modules/.cache'
+USER node
+RUN mkdir -p /home/node/app
+WORKDIR /home/node/app
+COPY --chown=node:node ./package.json ./
+RUN npm install
+COPY --chown=node:node ./ ./
+
+
+CMD [ "npm", "run", "start" ]
+
+
+# docker run -it -f -p 3000:3000 -v/home/node/app/node_modules -v$(pwd):/home/node/app mahmoudzidan/frontend
